@@ -8,16 +8,9 @@ import {
 
 const router = express.Router();
 
-// GET all products
 router.get("/", getProducts);
-
-// Create product end-point
 router.post("/", createProduct);
-
-// Update product end-point
 router.patch("/:id", updateProduct);
-
-// Delete product end point
 router.delete("/:id", deleteProduct);
 
 export default router;
