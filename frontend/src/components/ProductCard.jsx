@@ -24,12 +24,12 @@ import {
 import { useProductStore } from "../store/product";
 
 const ProductCard = ({ product }) => {
-  const [updatedProduct, setUpdatedProduct] = useState(product);
+  const [updateProduct, setUpdateProduct] = useState(product);
 
   const textColor = useColorModeValue("gray.600", "gray.200");
   const bg = useColorModeValue("white", "gray.800");
 
-  const { deleteProduct, updateProduct } = useProductStore();
+  const { deleteProduct } = useProductStore();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -54,8 +54,8 @@ const ProductCard = ({ product }) => {
     }
   };
 
-  const handleUpdateProduct = async (pid, updatedProduct) => {
-    const { success, message } = await updateProduct(pid, updatedProduct);
+  const handleUpdateProduct = async (pid, updateProduct) => {
+    const { success, message } = await updateProduct(pid, updateProduct);
     onClose();
     if (!success) {
       toast({
@@ -121,19 +121,19 @@ const ProductCard = ({ product }) => {
               <Input
                 placeholder="Product Name"
                 name="name"
-                value={updatedProduct.name}
+                value={updateProduct.name}
                 onChange={(e) =>
-                  setUpdatedProduct({ ...updatedProduct, name: e.target.value })
+                  setUpdateProduct({ ...updateProduct, name: e.target.value })
                 }
               />
               <Input
                 placeholder="Price"
                 name="price"
                 type="number"
-                value={updatedProduct.price}
+                value={updateProduct.price}
                 onChange={(e) =>
-                  setUpdatedProduct({
-                    ...updatedProduct,
+                  setUpdateProduct({
+                    ...updateProduct,
                     price: e.target.value,
                   })
                 }
@@ -141,10 +141,10 @@ const ProductCard = ({ product }) => {
               <Input
                 placeholder="Image URL"
                 name="image"
-                value={updatedProduct.image}
+                value={updateProduct.image}
                 onChange={(e) =>
-                  setUpdatedProduct({
-                    ...updatedProduct,
+                  setUpdateProduct({
+                    ...updateProduct,
                     image: e.target.value,
                   })
                 }
@@ -155,7 +155,7 @@ const ProductCard = ({ product }) => {
             <Button
               colorScheme="blue"
               mr={3}
-              onClick={() => handleUpdateProduct(product._id, updatedProduct)}
+              onClick={() => handleUpdateProduct(product._id, updateProduct)}
             >
               Update
             </Button>
