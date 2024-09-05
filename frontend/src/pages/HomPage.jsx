@@ -10,8 +10,6 @@ const HomPage = () => {
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
-  console.log("Product", products);
-
   return (
     <Container maxW="container.xl" py={12}>
       <VStack spacing={8}>
