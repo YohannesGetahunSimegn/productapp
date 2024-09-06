@@ -38,23 +38,46 @@ export const useProductStore = create((set) => ({
     return { success: true, message: data.message };
   },
   updateProduct: async (pid, updatedProduct) => {
-    const res = await fetch(`/api/products/${pid}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedProduct),
-    });
-    const data = await res.json();
-    if (!data.success) return { success: false, message: data.message };
+    try {
+      const res = await fetch(`/api/products/${pid}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedProduct),
+      });
 
-    // update the ui immediately, without needing a refresh
-    set((state) => ({
-      products: state.products.map((product) =>
-        product._id === pid ? data.data : product
-      ),
-    }));
+      console.log("Response Status:", res.status);
+      console.log("Response Headers:", res.headers.get("content-type"));
 
-    return { success: true, message: data.message };
+      // Check if response is JSON
+      const contentType = res.headers.get("content-type");
+      if (!res.ok) {
+        if (contentType && contentType.includes("application/json")) {
+          const errorData = await res.json();
+          return {
+            success: false,
+            message: errorData.message || "Update failed",
+          };
+        } else {
+          return { success: false, message: "Server error: Non-JSON response" };
+        }
+      }
+
+      const data = await res.json();
+      console.log("Update Response Data:", data);
+
+      // Update the UI immediately without needing a refresh
+      set((state) => ({
+        products: state.products.map((product) =>
+          product._id === pid ? data.data : product
+        ),
+      }));
+
+      return { success: true, message: "Product updated successfully" };
+    } catch (error) {
+      console.error("Update Product Error:", error);
+      return { success: false, message: `Error: ${error.message}` };
+    }
   },
 }));
